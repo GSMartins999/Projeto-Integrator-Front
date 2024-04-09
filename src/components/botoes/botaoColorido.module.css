@@ -1,0 +1,17 @@
+.botao{
+    background: linear-gradient(#FF6489, #F9B24E);
+    width: 335px;
+    height: 51px;
+    border-radius: 27px;
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+p{
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}

@@ -1,0 +1,108 @@
+.containerGeral{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-width: 400px;
+    gap: 10px;
+}
+
+.containerObjeto{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 160px;
+}
+
+.containerTextos{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.texto{
+    width: 70%;
+    font-weight: bold;
+    margin: 5px 0 0 0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    color: #373737;
+    font-size: 1.8rem;
+
+}
+
+.Containerformulario{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    min-width: 300px;
+    height: 300px;
+
+}
+
+.formulario{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 200px;
+    gap: 10px;
+}
+
+.input{
+    height: 40px;
+    width: 300px;
+    border: #D5D8DE solid 2px;
+    padding-left: 8px;
+}
+
+
+.ContainerTextos{
+    color: black;  
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content:right;
+    align-items: center;
+}
+
+.textos{
+    color: #000000;
+    margin: 0 auto;
+    font-size: 1rem;
+}
+
+.estiloTexto{
+    text-decoration: none;
+    color: #1087ff;
+}
+
+.ContainerTexto2{
+    color: black;  
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content:right;
+    align-items: center;
+    margin-left: 50px;
+}
+
+.checkBox{
+    margin-right: 10px;
+}
+.ContainerBotoes{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 500px;
+}

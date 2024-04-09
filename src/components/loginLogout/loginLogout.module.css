@@ -1,0 +1,25 @@
+.Container{
+    width: 100%;
+    height: 50px;
+    min-width: 430px;
+    min-height: 80px;
+    background-color: #EDEDED;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.ContainerEntrarSairBotao{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20%;      
+    margin-right: 5px;
+}
+
+.botaoEntrarSair{
+    text-decoration: none;
+    color: #4088CB;
+    cursor: pointer;
+}

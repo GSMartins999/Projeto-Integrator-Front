@@ -1,0 +1,33 @@
+.containerImg{
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.laranjaEscuro{
+    background-color: #FE7E02;
+    height: 28px;
+    width: 28px;
+    -webkit-border-top-left-radius: 50px;
+}
+
+.laranjaClaro{
+    background-color: #F9B24E;
+    height: 28px;
+    width: 28px;
+    -webkit-border-bottom-right-radius: 50px;
+}
+.preto{
+    background-color: #45525B;
+    height: 28px;
+    width: 28px;
+    -webkit-border-top-left-radius: 50px;
+}
+
+.cinza{
+    background-color: #A8BBC6;
+    height: 28px;
+    width: 28px;
+    -webkit-border-bottom-right-radius: 50px;
+}

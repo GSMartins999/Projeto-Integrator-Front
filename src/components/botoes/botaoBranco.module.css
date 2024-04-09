@@ -1,0 +1,18 @@
+.botaoBranco{
+    width: 335px;
+    height: 51px;
+    border: solid 5px #FE7E02;
+    border-radius: 27px;
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    cursor: pointer;
+}
+
+.textoBotao{
+    color: #FE7E02;
+    font-weight: bold;
+    font-size: 18px;
+}
