@@ -1,8 +1,7 @@
 import './App.css';
 import { createGlobalStyle } from "styled-components";
-import Login from './pages/loginPage/login';
-import Cadastro from './pages/cadastroPage/cadastro';
-
+import Router from './Router/index.js';
+import { GlobalProvider } from './contexts/GlobalContext.js';
 
 const GlobalStyle = createGlobalStyle`
   body{
@@ -29,13 +28,14 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
+
+     
+
   return (
-    <>
-     <GlobalStyle />
-      {/* <BotaoColorido/> */}
-      <Login/>
-      <Cadastro/>
-    </>
+    <GlobalProvider>
+      <GlobalStyle />
+      <Router/>
+    </GlobalProvider>
   );
 }
 
