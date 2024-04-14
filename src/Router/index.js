@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom"
 import Login from "../pages/login/login";
 import Cadastro from "../pages/cadastro/cadastro";
 import Home from "../pages/home/home";
-import Resposta from "../pages/resposta/resposta";
+import Feed from "../pages/feed/feed"
 
 
 
@@ -22,10 +22,10 @@ const Router = () => {
         <Fragment>
         <Routes>
             <Route path="/" element={ <Login/>}/>
-            <Route path="/home" element={ <Private Item={Home} />}/>
+            <Route path="/home" element={ <Home/>}/>
             <Route path="/cadastro" element={ <Cadastro /> }/>
             <Route path="/login" element={<Login />} />
-            <Route path="/resposta" element={<Resposta />} />
+            <Route path="/feed" element={<Feed />} />
         </Routes>
         </Fragment>
         </BrowserRouter>

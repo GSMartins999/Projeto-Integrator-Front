@@ -1,9 +1,11 @@
-import { goToLogin } from "../../Router/cordinator";
+import { goToHome } from "../../Router/cordinator";
 import BotaoColorido from "../../components/botoes/botaoColorido";
-import Imagem from "../../components/imagemLabenu/imagem";
 import LoginLogout from "../../components/loginLogout/loginLogout";
+import { BASE_URL } from "../../constants/BASE_URL";
 import { useForm } from "../../hooks/useForm";
 import styles from "./cadastro.module.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Cadastro() {
   const { form, onChangeInputs, clearInputs } = useForm({
@@ -12,20 +14,37 @@ function Cadastro() {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   //Função para enviar os dados
   const enviaCadastro = (event) => {
     event.preventDefault();
-    console.log(form.apelido, form.email, form.password);
+    const dadosUsuario = {
+      name: form.apelido,
+      email: form.email,
+      password: form.password,
+    };
+    console.log(dadosUsuario);
+    //Criando User e pegando o token e armazenando no localStorage
+    axios
+      .post(`https://jsonplaceholder.typicode.com/posts`, dadosUsuario)
+      .then((res) => {
+        console.log(res.data.token);
+        localStorage.setItem("token", res.data.token);
+        goToHome(navigate);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
     clearInputs();
   };
-
 
   return (
     <>
       <div className={styles.containerGeral}>
-
         <div className={styles.containerObjeto}>
-            <LoginLogout/>
+          <LoginLogout />
           <div className={styles.containerTextos}>
             <p className={styles.texto}>Olá, boas vindas ao LabEddit ;</p>
           </div>
@@ -63,7 +82,7 @@ function Cadastro() {
               value={form.password}
               onChange={onChangeInputs}
               required
-              pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$"
+              // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$"
               title="A senha deve conter pelo menos 8 caracteres, incluindo pelo menos um dígito, uma letra minúscula, uma letra maiúscula e um caractere especial ($, *, &, @ ou #)"
             />
             <div className={styles.ContainerTextos}>
@@ -92,10 +111,10 @@ function Cadastro() {
                 Eu concordo em receber emails sobre coisas legais no Labeddit
               </p>
             </div>
-            <BotaoColorido/>
+            <BotaoColorido />
           </form>
         </div>
-    </div>
+      </div>
     </>
   );
 }

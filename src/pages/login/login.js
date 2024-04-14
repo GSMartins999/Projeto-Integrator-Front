@@ -4,6 +4,9 @@ import BotaoColorido from "../../components/botoes/botaoColorido";
 import Imagem from "../../components/imagemLabenu/imagem";
 import styles from "./login.module.css";
 import { useForm } from "../../hooks/useForm";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { goToHome } from "../../Router/cordinator";
 
 function Login() {
   const { form, onChangeInputs, clearInputs } = useForm({
@@ -11,10 +14,23 @@ function Login() {
     password: "",
   });
 
+  const navigate = useNavigate();
   // Função para enviar os dados
   const enviaLogin = (event) => {
     event.preventDefault();
-    console.log(form.email, form.password);
+    console.log(form);
+    //Criando User e pegando o token e armazenando no localStorage
+    axios
+      .post(`https://jsonplaceholder.typicode.com/posts`, form)
+      .then((res) => {
+        console.log(res.data.token);
+        localStorage.setItem("token", res.data.token);
+        goToHome(navigate);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
     clearInputs();
   };
 
@@ -49,7 +65,7 @@ function Login() {
               className={styles.input}
               value={form.password}
               onChange={onChangeInputs}
-              pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$"
+              // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$"
               title="A senha deve conter pelo menos 8 caracteres, incluindo pelo menos um dígito, uma letra minúscula, uma letra maiúscula e um caractere especial ($, *, &, @ ou #)"
             />
 

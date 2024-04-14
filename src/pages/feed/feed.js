@@ -1,12 +1,12 @@
 import LoginLogout from "../../components/loginLogout/loginLogout"
 import styles from "./respostas.module.css"
 
-function Resposta(){
+function Feed(){
     return(
         <>
-            <LoginLogout/>
+        <LoginLogout/>
         </>
     )
 }
 
-export default Resposta
+export default Feed
