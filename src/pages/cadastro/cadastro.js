@@ -20,14 +20,14 @@ function Cadastro() {
   const enviaCadastro = (event) => {
     event.preventDefault();
     const dadosUsuario = {
-      name: form.apelido,
+      apelido: form.apelido,
       email: form.email,
       password: form.password,
     };
     console.log(dadosUsuario);
     //Criando User e pegando o token e armazenando no localStorage
     axios
-      .post(`https://jsonplaceholder.typicode.com/posts`, dadosUsuario)
+      .post(`${BASE_URL}/users`, dadosUsuario)
       .then((res) => {
         console.log(res.data.token);
         localStorage.setItem("token", res.data.token);
@@ -82,7 +82,7 @@ function Cadastro() {
               value={form.password}
               onChange={onChangeInputs}
               required
-              // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$"
+              pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$"
               title="A senha deve conter pelo menos 8 caracteres, incluindo pelo menos um dígito, uma letra minúscula, uma letra maiúscula e um caractere especial ($, *, &, @ ou #)"
             />
             <div className={styles.ContainerTextos}>
