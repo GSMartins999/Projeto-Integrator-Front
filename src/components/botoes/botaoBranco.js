@@ -8,7 +8,7 @@ export default function BotaoBranco({ onClick }) {
 
     const handleCadastrar = () => {
         goToCadastro(navigate);
-        if (onClick) onClick(); // Aqui adicionamos o onClick para propagar o evento
+        if (onClick) onClick();
     };
 
     return (

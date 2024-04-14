@@ -1,69 +1,103 @@
-import BotaoColorido from "../../components/botoes/botaoColorido"
-import styles from "./cadastro.module.css"
-import { useGlobalContext } from "../../contexts/GlobalContext";
+import { goToLogin } from "../../Router/cordinator";
+import BotaoColorido from "../../components/botoes/botaoColorido";
+import Imagem from "../../components/imagemLabenu/imagem";
+import LoginLogout from "../../components/loginLogout/loginLogout";
+import { useForm } from "../../hooks/useForm";
+import styles from "./cadastro.module.css";
+
+function Cadastro() {
+  const { form, onChangeInputs, clearInputs } = useForm({
+    apelido: "",
+    email: "",
+    password: "",
+  });
+
+  //Função para enviar os dados
+  const enviaCadastro = (event) => {
+    event.preventDefault();
+    console.log(form.apelido, form.email, form.password);
+    clearInputs();
+  };
 
 
+  return (
+    <>
+      <div className={styles.containerGeral}>
 
-function Cadastro(){
+        <div className={styles.containerObjeto}>
+            <LoginLogout/>
+          <div className={styles.containerTextos}>
+            <p className={styles.texto}>Olá, boas vindas ao LabEddit ;</p>
+          </div>
+        </div>
 
+        <div className={styles.Containerformulario}>
+          <form
+            onSubmit={enviaCadastro}
+            method="get"
+            className={styles.formulario}
+          >
+            <input
+              type="name"
+              name="apelido"
+              placeholder="Apelido"
+              className={styles.input}
+              value={form.apelido}
+              required
+              onChange={onChangeInputs}
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="E-mail"
+              className={styles.input}
+              value={form.email}
+              required
+              onChange={onChangeInputs}
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Senha"
+              className={styles.input}
+              value={form.password}
+              onChange={onChangeInputs}
+              required
+              pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$"
+              title="A senha deve conter pelo menos 8 caracteres, incluindo pelo menos um dígito, uma letra minúscula, uma letra maiúscula e um caractere especial ($, *, &, @ ou #)"
+            />
+            <div className={styles.ContainerTextos}>
+              <p className={styles.textos}>
+                Ao continuar, você concorda com o nosso{" "}
+                <a href="" className={styles.estiloTexto}>
+                  Contrato de usuário
+                </a>{" "}
+                e nossa{" "}
+                <a href="" className={styles.estiloTexto}>
+                  Política de Privacidade
+                </a>
+              </p>
+            </div>
 
-    const {apelido, setApelido, email, setEmail, password, setPassword} = useGlobalContext();
-
-    //Função que muda os dados
-    const handleChangeApelido = (event) => {
-        setApelido(event.target.value);
-    };
-
-    const handleChangeEmail = (event) => {
-        setEmail(event.target.value);
-    };
-        
-    const handleChangePassword = (event) => {
-        setPassword(event.target.value);
-    };
-
-    //Função para enviar os dados
-    const enviarDados = (event) => {
-        event.preventDefault()
-        console.log(apelido, email, password)
-    }
-
-    
-    
-
-    return(
-        <>
-            <div className={styles.containerGeral}>
-                <div className={styles.containerObjeto}>
-                    <div className={styles.containerTextos}>
-                        <p className={styles.texto}>Olá, boas vindas ao LabEddit ;</p>
-                    </div>
-                </div>
-
-                <div className={styles.Containerformulario}>
-                    <form method="get" action="envio_dados.php" className={styles.formulario}>
-                        <input type="name" name="nome" placeholder="Apelido" className={styles.input} value={apelido} onChange={handleChangeApelido}/>
-                        <input type="email" name="email" placeholder="E-mail" className={styles.input}
-                        value={email} onChange={handleChangeEmail}/>
-                        <input type="password" name="password" placeholder="Senha" className={styles.input}
-                        value={password} onChange={handleChangePassword}/>
-                    </form>
-                </div>
-                
-                <div className={styles.ContainerTextos}>
-                    <p className={styles.textos}>Ao continuar, você concorda com o nosso <a href="" className={styles.estiloTexto}>Contrato de usuário</a> e nossa <a href="" className={styles.estiloTexto}>Política de Privacidade</a></p>
-                </div>
-
-                <div className={styles.ContainerTexto2}>
-                    <input type="checkbox" id="topping" name="topping" value="Paneer" className={styles.checkBox}/>
-                    <p className={styles.textos}>Eu concordo em receber emails sobre coisas legais no Labeddit</p>
-                </div>
-                <div className={styles.ContainerBotoes}>
-                    <BotaoColorido onClick={enviarDados}/>
-                </div>
-            </div> 
-        </>
-    )
+            <div className={styles.ContainerTexto2}>
+              <input
+                type="checkbox"
+                id="topping"
+                name="topping"
+                value="Paneer"
+                className={styles.checkBox}
+                required
+              />
+              <p className={styles.textoCheckBox}>
+                Eu concordo em receber emails sobre coisas legais no Labeddit
+              </p>
+            </div>
+            <BotaoColorido/>
+          </form>
+        </div>
+    </div>
+    </>
+  );
 }
 
-export default Cadastro
+export default Cadastro;

@@ -24,7 +24,7 @@ const Router = () => {
             <Route path="/" element={ <Login/>}/>
             <Route path="/home" element={ <Private Item={Home} />}/>
             <Route path="/cadastro" element={ <Cadastro /> }/>
-            <Route path="*" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/resposta" element={<Resposta />} />
         </Routes>
         </Fragment>

@@ -1,41 +1,34 @@
 import React from 'react';
 import styles from "./botaoColorido.module.css";
 import { useLocation } from "react-router-dom";
-import { useGlobalContext } from "../../contexts/GlobalContext";
 
-export default function BotaoColorido({onClick}){
-
-
+export default function BotaoColorido() {
     const location = useLocation();
+    let buttonText = "";
+
+    // Determinando o texto do botão com base na página atual
+    switch (location.pathname) {
+        case "/login":
+            buttonText = "Continuar";
+            break;
+        case "/cadastro":
+            buttonText = "Cadastrar";
+            break;
+        case "/home":
+            buttonText = "Postar";
+            break;
+        case "/resposta":
+            buttonText = "Responder";
+            break;
+        default:
+            buttonText = "Continuar"
+    }
 
     return (
-        <>
-            <div>
-                {
-                    location.pathname === "/login" ? (
-                        <button type="submit" className={styles.botao} onClick={onClick}>
-                        <p>Continuar</p>
-                        </button>
-                    ) : location.pathname === "*" ? (
-                        <button type="submit" className={styles.botao} onClick={onClick}>
-                        <p>Continuar</p>
-                        </button>
-                    ) : location.pathname === "/cadastro" ? (
-                        <button type="submit" className={styles.botao} onClick={onClick}>
-                        <p>Cadastrar</p>
-                        </button>
-                    ): location.pathname === "/home" ? (
-                        <button type="submit" className={styles.botao} onClick={onClick}>
-                        <p>Postar</p>
-                        </button>
-                    ) : location.pathname === "/resposta" (
-                        <button type="submit" className={styles.botao} onClick={onClick}>
-                        <p>Responder</p>
-                        </button>
-                    ) 
-                }
-
-            </div>
-        </>
-    )
+        <div>
+            <button type="submit" className={styles.botao}>
+                <p>{buttonText}</p>
+            </button>
+        </div>
+    );
 }

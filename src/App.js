@@ -1,7 +1,6 @@
 import './App.css';
 import { createGlobalStyle } from "styled-components";
 import Router from './Router/index.js';
-import { GlobalProvider } from './contexts/GlobalContext.js';
 
 const GlobalStyle = createGlobalStyle`
   body{
@@ -32,10 +31,10 @@ function App() {
      
 
   return (
-    <GlobalProvider>
+    <>
       <GlobalStyle />
       <Router/>
-    </GlobalProvider>
+    </>
   );
 }
 

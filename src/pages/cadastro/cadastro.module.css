@@ -6,7 +6,9 @@
     width: 100%;
     min-width: 400px;
     gap: 10px;
+    height: 100%;
 }
+
 
 .containerObjeto{
     width: 100%;
@@ -15,6 +17,7 @@
     justify-content: center;
     align-items: center;
     height: 160px;
+    margin-bottom: 80px;
 }
 
 .containerTextos{
@@ -22,6 +25,8 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-top: 10px;
+
 }
 .texto{
     width: 70%;
@@ -44,8 +49,8 @@
     flex-direction: column;
     width: 100%;
     min-width: 300px;
-    height: 300px;
-
+    height: 100%;
+    margin-bottom: 80px;
 }
 
 .formulario{
@@ -54,15 +59,18 @@
     align-items: center;
     flex-direction: column;
     width: 100%;
-    height: 200px;
+    height: 100%;
     gap: 10px;
+    min-height: 300px;
+
 }
 
 .input{
     height: 40px;
-    width: 300px;
+    width: 350px;
     border: #D5D8DE solid 2px;
     padding-left: 8px;
+    min-height: 40px;
 }
 
 
@@ -73,12 +81,14 @@
     flex-direction: row;
     justify-content:right;
     align-items: center;
+    margin-top: 50px;
 }
 
 .textos{
     color: #000000;
     margin: 0 auto;
     font-size: 1rem;
+    width: 68%;
 }
 
 .estiloTexto{
@@ -88,21 +98,21 @@
 
 .ContainerTexto2{
     color: black;  
-    width: 80%;
+    width: 50%;
     display: flex;
     flex-direction: row;
     justify-content:right;
     align-items: center;
-    margin-left: 50px;
 }
 
 .checkBox{
-    margin-right: 10px;
+    border: solid 2px pink;
+
 }
-.ContainerBotoes{
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 500px;
+.textoCheckBox{
+    color: #000000;
+    margin: 0 auto;
+    font-size: 1rem;
+    width: 100%;
+    margin-left: 15px;
 }
