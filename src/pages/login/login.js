@@ -26,7 +26,18 @@ function Login() {
       localStorage.setItem("token", token);
       goToHome(navigate);
     } catch (error) {
-      console.error("Erro ao fazer login:", error);
+      let errorMessage = "Erro ao fazer login";
+      let statusCode = 500;
+    
+      if (error.response) {
+        if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        } else if (error.response.data && error.response.data.error) {
+          errorMessage = error.response.data.error;
+        }
+        statusCode = error.response.status;
+      }
+      alert(`${errorMessage} - Status: ${statusCode}`);
     }
     clearInputs();
   };
