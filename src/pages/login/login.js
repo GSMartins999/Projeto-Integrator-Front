@@ -6,7 +6,7 @@ import styles from "./login.module.css";
 import { useForm } from "../../hooks/useForm";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { goToHome } from "../../Router/cordinator";
+import { goToFeed } from "../../Router/cordinator";
 import { BASE_URL } from "../../constants/BASE_URL";
 
 function Login() {
@@ -24,7 +24,7 @@ function Login() {
       const response = await axios.post(`${BASE_URL}/login`, form);
       const { token } = response.data;
       localStorage.setItem("token", token);
-      goToHome(navigate);
+      goToFeed(navigate);
     } catch (error) {
       let errorMessage = "Erro ao fazer login";
       let statusCode = 500;

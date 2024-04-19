@@ -1,4 +1,4 @@
-import { goToHome } from "../../Router/cordinator";
+import { goToFeed } from "../../Router/cordinator";
 import BotaoColorido from "../../components/botoes/botaoColorido";
 import LoginLogout from "../../components/loginLogout/loginLogout";
 import { BASE_URL } from "../../constants/BASE_URL";
@@ -31,7 +31,7 @@ function Cadastro() {
       .then((res) => {
         console.log(res.data.token);
         localStorage.setItem("token", res.data.token);
-        goToHome(navigate);
+        goToFeed(navigate);
       })
       .catch((error) => {
         console.log(error.response);
