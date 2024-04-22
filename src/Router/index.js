@@ -2,19 +2,18 @@ import { Fragment } from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom"
 import Login from "../pages/login/login";
 import Cadastro from "../pages/cadastro/cadastro";
-
 import ErrorPage from "../pages/error/ErrorPage";
 import Feed from "../pages/feed/feed";
 import Comentarios from "../pages/comentarios/comentarios";
 
 
 
-//Verifica se a pessoa está logada, se não ele direciona para a página de login, se estiver ele retorna para o Item(no caso a página Home)
-const Private = ({Item}) => {
-    const signed = false;
+// //Verifica se a pessoa está logada, se não ele direciona para a página de login, se estiver ele retorna para o Item(no caso a página Home)
+// const Private = ({Item}) => {
+//     const signed = false;
 
-    return signed > 0 ? <Item/> : <Login/>
-}
+//     return signed > 0 ? <Item/> : <Login/>
+// }
 
 
 const Router = () => {

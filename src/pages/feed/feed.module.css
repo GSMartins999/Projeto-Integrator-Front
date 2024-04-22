@@ -7,6 +7,7 @@
     align-items: center;
     flex-direction: column;
     gap: 20px;
+    margin-bottom: 100px;
 }
 
 .Formulario {
@@ -42,4 +43,13 @@
     height: 2px;
     background: linear-gradient(#FF6489, #F9B24E);
     margin-top: 20px;
+}
+
+.ContainerCard{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

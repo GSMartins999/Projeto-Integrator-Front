@@ -1,5 +1,3 @@
-// Feed.js
-
 import React, { useEffect, useState } from "react";
 import BotaoColorido from "../../components/botoes/botaoColorido";
 import LoginLogout from "../../components/loginLogout/loginLogout";
@@ -94,7 +92,7 @@ function Feed() {
         <div className={styles.LinhaSeparacao}></div>
       </form>
 
-     <div>
+     <div className={styles.ContainerCard}>
      {posts.map((post) => (
         <Card
           key={post.id}
