@@ -1,6 +1,6 @@
 // Feed.js
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BotaoColorido from "../../components/botoes/botaoColorido";
 import LoginLogout from "../../components/loginLogout/loginLogout";
 import styles from "./feed.module.css";
@@ -8,6 +8,7 @@ import axios from "axios";
 import { BASE_URL } from "../../constants/BASE_URL";
 import { useForm } from "../../hooks/useForm";
 import getUserIdFromToken from "../../utils/getUserIdFromToken";
+import { Card } from "../../components/card/card";
 
 function Feed() {
   // Armazenando em um estado o texto para enviar para o backend
@@ -30,7 +31,6 @@ function Feed() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
     try {
       const userId = getUserIdFromToken();
       if (!userId) {
@@ -60,6 +60,22 @@ function Feed() {
     clearInputs();
   };
 
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/posts`);
+        setPosts(response.data);
+      } catch (error) {
+        console.log("Error", error.response);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+
   return (
     <div className={styles.ContainerGeral}>
       <LoginLogout />
@@ -77,6 +93,15 @@ function Feed() {
         <BotaoColorido />
         <div className={styles.LinhaSeparacao}></div>
       </form>
+
+     <div>
+     {posts.map((post) => (
+        <Card
+          key={post.id}
+          post={post}
+        />
+      ))}
+  </div>
     </div>
   );
 }
