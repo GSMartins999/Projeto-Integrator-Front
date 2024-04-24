@@ -1,49 +1,50 @@
-import React, { useState } from "react";
-import BotaoColorido from "../../components/botoes/botaoColorido";
+import React, { useEffect, useState } from "react";
 import LoginLogout from "../../components/loginLogout/loginLogout";
-import styles from "./respostas.module.css";
+import BotaoColorido from "../../components/botoes/botaoColorido";
+import styles from "./comentarios.module.css";
 import axios from "axios";
 import { BASE_URL } from "../../constants/BASE_URL";
-import { useForm } from "../../hooks/useForm";
 import getUserIdFromToken from "../../utils/getUserIdFromToken";
+import { useParams } from "react-router-dom";
 
-function Feed() {
-  // Armazenando em um estado o texto para enviar para o backend
-  const [texto, setTexto] = useState("");
-  const { clearInputs } = useForm({
-    email: "",
-    password: "",
-  });
+function Comentarios() {
+  const { postId } = useParams();
+  const [comentarios, setComentarios] = useState([]);
+  const [textoComentario, setTextoComentario] = useState("");
+  const userId = getUserIdFromToken();
 
-  const handleChange = (event) => {
-    setTexto(event.target.value);
-    if (event.target.value === "") {
-      // Se estiver vazio, retorna a altura para 50px
-      event.target.style.height = "150px";
-    } else {
-      // Ajusta a altura do textarea de acordo com o tamanho do texto
-      event.target.style.height =
-        Math.max(event.target.scrollHeight, 50) + "px";
-    }
+  useEffect(() => {
+    const fetchComentarios = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/posts/${postId}/comentarios`);
+        setComentarios(response.data);
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          console.log("Nenhum comentário encontrado para o post.");
+          setComentarios([]); // Define a lista de comentários como vazia
+        } else {
+          console.log("Erro ao buscar comentários: ", error);
+        }
+      }
+    };
+
+    fetchComentarios();
+  }, [postId]);
+
+  const handleChangeComentario = (event) => {
+    setTextoComentario(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmitComentario = async (event) => {
     event.preventDefault();
     try {
-      const userId = getUserIdFromToken();
-      if (!userId) {
-        console.error("Erro: Token inválido ou não encontrado.");
-        return;
-      }
-
-      const response = await axios.post(
-        `${BASE_URL}/posts`,
+      await axios.post(
+        `${BASE_URL}/posts/${postId}/comentarios`,
         {
-          description: texto,
+          comentario: textoComentario,
+          responsavelId: userId,
           numeroCurtidas: 0,
           numeroDeslikes: 0,
-          numeroComentarios: 0,
-          responsavelId: userId, // Adiciona o ID do usuário como responsável do post
         },
         {
           headers: {
@@ -51,32 +52,46 @@ function Feed() {
           },
         }
       );
-      console.log(response.data);
+      const response = await axios.get(`${BASE_URL}/posts/${postId}/comentarios`);
+      setComentarios(response.data);
+      setTextoComentario("");
     } catch (error) {
-      console.log(error);
+      console.log("Erro ao adicionar comentário: ", error);
     }
-    clearInputs();
   };
 
   return (
     <div className={styles.ContainerGeral}>
       <LoginLogout />
-      <form className={styles.Formulario} onSubmit={handleSubmit}>
+      <form className={styles.Formulario} onSubmit={handleSubmitComentario}>
         <div className={styles.InputWrapper}>
           <textarea
             className={styles.input}
-            placeholder="Escreva aqui seu post..."
+            placeholder="Escreva seu comentário..."
             required
-            value={texto}
-            onChange={handleChange}
+            value={textoComentario}
+            onChange={handleChangeComentario}
             style={{ minHeight: "80px" }}
           />
         </div>
         <BotaoColorido />
         <div className={styles.LinhaSeparacao}></div>
       </form>
+
+      <div className={styles.ContainerComentarios}>
+        {comentarios.length === 0 ? (
+          <p className={styles.texto}>Nenhum comentário encontrado para este post.</p>
+        ) : (
+          comentarios.map((comentario) => (
+            <div key={comentario.id} className={styles.ContainerCard}>
+              <p className={styles.texto}>Enviado por: {comentario.responsavelId}</p>
+              <p className={styles.texto}>{comentario.comentario}</p>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }
 
-export default Feed;
+export default Comentarios;

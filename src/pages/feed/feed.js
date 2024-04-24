@@ -4,13 +4,14 @@ import LoginLogout from "../../components/loginLogout/loginLogout";
 import styles from "./feed.module.css";
 import axios from "axios";
 import { BASE_URL } from "../../constants/BASE_URL";
-import { useForm } from "../../hooks/useForm";
-import getUserIdFromToken from "../../utils/getUserIdFromToken";
 import { Card } from "../../components/card/card";
+import getUserIdFromToken from "../../utils/getUserIdFromToken";
+import { useForm } from "../../hooks/useForm";
 
 function Feed() {
-  // Armazenando em um estado o texto para enviar para o backend
   const [texto, setTexto] = useState("");
+  const [posts, setPosts] = useState([]);
+  const [userId, setUserId] = useState("");
   const { clearInputs } = useForm({
     email: "",
     password: "",
@@ -19,16 +20,15 @@ function Feed() {
   const handleChange = (event) => {
     setTexto(event.target.value);
     if (event.target.value === "") {
-      // Se estiver vazio, retorna a altura para 50px
       event.target.style.height = "150px";
     } else {
-      // Ajusta a altura do textarea de acordo com o tamanho do texto
       event.target.style.height =
         Math.max(event.target.scrollHeight, 50) + "px";
     }
   };
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
       const userId = getUserIdFromToken();
       if (!userId) {
@@ -43,7 +43,7 @@ function Feed() {
           numeroCurtidas: 0,
           numeroDeslikes: 0,
           numeroComentarios: 0,
-          responsavelId: userId, // Adiciona o ID do usuário como responsável do post
+          responsavelId: userId,
         },
         {
           headers: {
@@ -52,27 +52,33 @@ function Feed() {
         }
       );
       console.log(response.data);
+      fetchPosts();
     } catch (error) {
       console.log(error);
     }
     clearInputs();
   };
 
-  const [posts, setPosts] = useState([]);
+  const fetchPosts = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BASE_URL}/posts`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setPosts(response.data);
+    } catch (error) {
+      console.log("Error", error.response);
+    }
+  };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/posts`);
-        setPosts(response.data);
-      } catch (error) {
-        console.log("Error", error.response);
-      }
-    };
+    const userId = getUserIdFromToken();
+    setUserId(userId);
 
     fetchPosts();
   }, []);
-
 
   return (
     <div className={styles.ContainerGeral}>
@@ -92,14 +98,11 @@ function Feed() {
         <div className={styles.LinhaSeparacao}></div>
       </form>
 
-     <div className={styles.ContainerCard}>
-     {posts.map((post) => (
-        <Card
-          key={post.id}
-          post={post}
-        />
-      ))}
-  </div>
+      <div className={styles.ContainerCard}>
+        {posts.map((post) => (
+          <Card key={post.id} post={post} userId={userId} />
+        ))}
+      </div>
     </div>
   );
 }

@@ -9,3 +9,7 @@ export const goToLogin = (navigate) =>{
 export const goToFeed = (navigate) =>{
     navigate("/feed");
 }
+
+export const goToComentarios = (navigate) =>{
+    navigate("/comentarios");
+}
