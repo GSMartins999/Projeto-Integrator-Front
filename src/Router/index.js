@@ -28,6 +28,7 @@ const Router = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="*" element={<ErrorPage />} />
+            <Route path="/comentarios/:postId" element={<Comentarios />} />
         </Routes>
         </Fragment>
         </BrowserRouter>

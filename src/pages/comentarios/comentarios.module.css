@@ -1,0 +1,69 @@
+.ContainerGeral {
+    width: 100%;
+    min-width: 400px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 100px;
+}
+
+.Formulario {
+    width: 350px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.input {
+    width: 100%;
+    min-width: 350px;
+    min-height: 50px;
+    height: 150px;
+    max-height: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #EDEDED;
+    box-sizing: border-box;
+    word-break: break-word;
+    border-radius: 10px;
+    resize: none
+}
+
+
+.LinhaSeparacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(#FF6489, #F9B24E);
+    margin-top: 20px;
+}
+
+.ContainerCard{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ContainerCard{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #EDEDED;
+}
+
+.texto{
+    color: black;
+}
