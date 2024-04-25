@@ -175,7 +175,7 @@ function Comentarios() {
               <p className={styles.titulo}>
                 Enviado por: {comentario.responsavelId}
               </p>
-              <p className={styles.texto}>{comentario.comentario}</p>
+              <p className={styles.textos}>{comentario.comentario}</p>
               <div className={styles.container}>
                 <div className={styles.card}>
                   <div className={styles.ContainerCurtidasComent}>
