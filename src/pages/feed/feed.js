@@ -5,16 +5,15 @@ import styles from "./feed.module.css";
 import axios from "axios";
 import { BASE_URL } from "../../constants/BASE_URL";
 import { Card } from "../../components/card/card";
-import getUserIdFromToken from "../../utils/getUserIdFromToken";
-import { useForm } from "../../hooks/useForm";
+import { useForm } from "../../hooks/useForm"; // Importe useForm
+import { jwtDecode } from "jwt-decode";
 
 function Feed() {
   const [texto, setTexto] = useState("");
   const [posts, setPosts] = useState([]);
   const [userId, setUserId] = useState("");
   const { clearInputs } = useForm({
-    email: "",
-    password: "",
+    texto: "",
   });
 
   const handleChange = (event) => {
@@ -27,10 +26,14 @@ function Feed() {
     }
   };
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const userId = getUserIdFromToken();
+      const token = localStorage.getItem("token");
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.id;
+
       if (!userId) {
         console.error("Erro: Token inválido ou não encontrado.");
         return;
@@ -40,14 +43,11 @@ function Feed() {
         `${BASE_URL}/posts`,
         {
           description: texto,
-          numeroCurtidas: 0,
-          numeroDeslikes: 0,
-          numeroComentarios: 0,
           responsavelId: userId,
         },
         {
           headers: {
-            Authorization: localStorage.getItem("token"),
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -62,9 +62,11 @@ function Feed() {
   const fetchPosts = async () => {
     try {
       const token = localStorage.getItem("token");
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.id;
       const response = await axios.get(`${BASE_URL}/posts`, {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       });
       setPosts(response.data);
@@ -74,9 +76,16 @@ function Feed() {
   };
 
   useEffect(() => {
-    const userId = getUserIdFromToken();
-    setUserId(userId);
-
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.id;
+        setUserId(userId);
+      } catch (error) {
+        console.log("Erro ao decodificar o token:", error);
+      }
+    }
     fetchPosts();
   }, []);
 
@@ -94,7 +103,7 @@ function Feed() {
             style={{ minHeight: "80px" }}
           />
         </div>
-        <BotaoColorido />
+        <BotaoColorido type="submit" />
         <div className={styles.LinhaSeparacao}></div>
       </form>
 

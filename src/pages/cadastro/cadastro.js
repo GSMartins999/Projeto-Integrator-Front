@@ -1,4 +1,4 @@
-import { goToFeed } from "../../Router/cordinator";
+import { goToFeed, goToLogin } from "../../Router/cordinator";
 import BotaoColorido from "../../components/botoes/botaoColorido";
 import LoginLogout from "../../components/loginLogout/loginLogout";
 import { BASE_URL } from "../../constants/BASE_URL";
@@ -31,7 +31,7 @@ function Cadastro() {
       .then((res) => {
         console.log(res.data.token);
         localStorage.setItem("token", res.data.token);
-        goToFeed(navigate);
+        goToLogin(navigate);
       })
       .catch((error) => {
         console.log(error.response);
@@ -53,7 +53,7 @@ function Cadastro() {
         <div className={styles.Containerformulario}>
           <form
             onSubmit={enviaCadastro}
-            method="get"
+            method="post"
             className={styles.formulario}
           >
             <input
@@ -111,7 +111,7 @@ function Cadastro() {
                 Eu concordo em receber emails sobre coisas legais no Labeddit
               </p>
             </div>
-            <BotaoColorido />
+            <BotaoColorido type="submit"/>
           </form>
         </div>
       </div>

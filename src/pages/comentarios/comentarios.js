@@ -4,14 +4,22 @@ import BotaoColorido from "../../components/botoes/botaoColorido";
 import styles from "./comentarios.module.css";
 import axios from "axios";
 import { BASE_URL } from "../../constants/BASE_URL";
-import getUserIdFromToken from "../../utils/getUserIdFromToken";
 import { useParams } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
 function Comentarios() {
   const { postId } = useParams();
   const [comentarios, setComentarios] = useState([]);
   const [textoComentario, setTextoComentario] = useState("");
-  const userId = getUserIdFromToken();
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setUserId(decodedToken.id);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchComentarios = async () => {
@@ -21,7 +29,7 @@ function Comentarios() {
       } catch (error) {
         if (error.response && error.response.status === 404) {
           console.log("Nenhum comentário encontrado para o post.");
-          setComentarios([]); // Define a lista de comentários como vazia
+          setComentarios([]);
         } else {
           console.log("Erro ao buscar comentários: ", error);
         }
@@ -38,6 +46,11 @@ function Comentarios() {
   const handleSubmitComentario = async (event) => {
     event.preventDefault();
     try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("Token inválido ou não encontrado.");
+        return;
+      }
       await axios.post(
         `${BASE_URL}/posts/${postId}/comentarios`,
         {
@@ -48,7 +61,7 @@ function Comentarios() {
         },
         {
           headers: {
-            Authorization: localStorage.getItem("token"),
+            Authorization: `Bearer ${token}`,
           },
         }
       );

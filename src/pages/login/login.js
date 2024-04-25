@@ -6,6 +6,7 @@ import styles from "./login.module.css";
 import { useForm } from "../../hooks/useForm";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode"; // Ajustando a importação do jwtDecode
 import { goToFeed } from "../../Router/cordinator";
 import { BASE_URL } from "../../constants/BASE_URL";
 
@@ -24,6 +25,11 @@ function Login() {
       const response = await axios.post(`${BASE_URL}/login`, form);
       const { token } = response.data;
       localStorage.setItem("token", token);
+      
+      // Decodificar o token JWT para obter informações
+      const decodedToken = jwtDecode(token);
+      console.log("ID do usuário:", decodedToken.id);
+      
       goToFeed(navigate);
     } catch (error) {
       let errorMessage = "Erro ao fazer login";
@@ -41,6 +47,7 @@ function Login() {
     }
     clearInputs();
   };
+  
 
   return (
     <>
@@ -75,7 +82,6 @@ function Login() {
               pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$"
               title="A senha deve conter pelo menos 8 caracteres, incluindo pelo menos um dígito, uma letra minúscula, uma letra maiúscula e um caractere especial ($, *, &, @ ou #)"
             />
-
             <BotaoColorido />
             <div className={styles.LinhaSeparacao}></div>
             <BotaoBranco />
