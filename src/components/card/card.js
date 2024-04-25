@@ -79,13 +79,13 @@ export const Card = ({ post, userId }) => {
         <p className={styles.textos}>{post.description}</p>
         <div className={styles.ContainerCurtidasComent}>
           <div className={styles.containerlikesDeslikes}>
-            <div>
+            <button>
               <img src={cima} className={styles.imagemSetas} onClick={handleCurtir} />
-            </div>
+            </button>
             {curtidas - deslikes}
-            <div>
+            <button>
               <img src={baixa} className={styles.imagemSetas} onClick={handleDescurtir} />
-            </div>
+            </button>
           </div>
           <Link to={`/comentarios/${post.id}`} className={styles.comentsContainer}>
             <div className={styles.coments}>

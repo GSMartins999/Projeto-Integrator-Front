@@ -42,11 +42,10 @@
 .ContainerCurtidasComent{
     display: flex;
     flex-direction: row;
-    width: 200px;
+    width: 250px;
     height: 40px;
     justify-content: center;
     align-items: center;
-    border: solid black 2px;
     gap: 40px;
 }
 
@@ -74,6 +73,8 @@
     border: #E0E0E0 solid 2px;
     gap: 10px;
     cursor: pointer;
+    width: 100px;
+    height: 25px;
 }
 
 .imagemSetas{
