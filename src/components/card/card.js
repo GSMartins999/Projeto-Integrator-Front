@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./card.module.css";
 import cima from "./../../img/cima.png";
 import baixa from "./../../img/baixa.png";
@@ -8,55 +8,68 @@ import { BASE_URL } from "../../constants/BASE_URL";
 import axios from "axios";
 
 export const Card = ({ post, userId }) => {
-  const [curtido, setCurtido] = useState(post.curtido);
-  const [descurtido, setDescurtido] = useState(post.descurtido);
-  const [numeroCurtidas, setNumeroCurtidas] = useState(post.numeroCurtidas);
-  const [numeroDeslikes, setNumeroDeslikes] = useState(post.numeroDeslikes);
+  const [curtidas, setCurtidas] = useState(post.numeroCurtidas);
+  const [deslikes, setDeslikes] = useState(post.numeroDeslikes);
+  const [isCurtido, setIsCurtido] = useState(false);
+  const [isDescurtido, setIsDescurtido] = useState(false);
+  const [numeroComentarios, setNumeroComentarios] = useState(post.numeroComentarios);
+
+  useEffect(() => {
+    setNumeroComentarios(post.numeroComentarios);
+    
+    // Verificar se o usuário já curtiu o post anteriormente
+    const liked = localStorage.getItem(`liked_${post.id}`);
+    setIsCurtido(liked === 'true');
+
+    // Verificar se o usuário já descurtiu o post anteriormente
+    const disliked = localStorage.getItem(`disliked_${post.id}`);
+    setIsDescurtido(disliked === 'true');
+  }, [post.numeroComentarios, post.id]);
 
   const handleCurtir = async () => {
     try {
-      await axios.post(
-        `${BASE_URL}/posts/${post.id}/likes`,
-        { userId },
-        {
+      if (!isCurtido) {
+        await axios.post(`${BASE_URL}/posts/${post.id}/likes`, { userId }, {
           headers: {
             Authorization: localStorage.getItem("token"),
-          },
+          }
+        });
+        setCurtidas(curtidas + 1);
+        setIsCurtido(true);
+        localStorage.setItem(`liked_${post.id}`, 'true');
+        if (isDescurtido) {
+          setDeslikes(deslikes - 1);
+          setIsDescurtido(false);
+          localStorage.removeItem(`disliked_${post.id}`);
         }
-      );
-      setCurtido(true);
-      setNumeroCurtidas(numeroCurtidas + 1);
-      if (descurtido) {
-        setDescurtido(false);
-        setNumeroDeslikes(numeroDeslikes - 1);
       }
     } catch (error) {
       console.log("Erro ao curtir o post: ", error);
     }
   };
-
+  
   const handleDescurtir = async () => {
     try {
-      await axios.post(
-        `${BASE_URL}/posts/${post.id}/deslikes`,
-        { userId },
-        {
+      if (!isDescurtido) {
+        await axios.post(`${BASE_URL}/posts/${post.id}/deslikes`, { userId }, {
           headers: {
             Authorization: localStorage.getItem("token"),
-          },
+          }
+        });
+        setDeslikes(deslikes + 1);
+        setIsDescurtido(true);
+        localStorage.setItem(`disliked_${post.id}`, 'true');
+        if (isCurtido) {
+          setCurtidas(curtidas - 1);
+          setIsCurtido(false);
+          localStorage.removeItem(`liked_${post.id}`);
         }
-      );
-      setDescurtido(true);
-      setNumeroDeslikes(numeroDeslikes + 1);
-      if (curtido) {
-        setCurtido(false);
-        setNumeroCurtidas(numeroCurtidas - 1);
       }
     } catch (error) {
       console.log("Erro ao descurtir o post: ", error);
     }
   };
-
+  
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -67,30 +80,17 @@ export const Card = ({ post, userId }) => {
         <div className={styles.ContainerCurtidasComent}>
           <div className={styles.containerlikesDeslikes}>
             <div>
-              <img
-                src={cima}
-                className={styles.imagemSetas}
-                onClick={handleCurtir}
-                alt="seta"
-              />
+              <img src={cima} className={styles.imagemSetas} onClick={handleCurtir} />
             </div>
-            {numeroCurtidas - numeroDeslikes}
+            {curtidas - deslikes}
             <div>
-              <img
-                src={baixa}
-                className={styles.imagemSetas}
-                onClick={handleDescurtir}
-                alt="seta"
-              />
+              <img src={baixa} className={styles.imagemSetas} onClick={handleDescurtir} />
             </div>
           </div>
-          <Link
-            to={`/comentarios/${post.id}`}
-            className={styles.comentsContainer}
-          >
+          <Link to={`/comentarios/${post.id}`} className={styles.comentsContainer}>
             <div className={styles.coments}>
-              <img src={comentário} className={styles.imagemSetas} alt="comentario"/>
-              <span>{post.numeroComentarios}</span>
+              <img src={comentário} className={styles.imagemSetas} />
+              <span>{numeroComentarios}</span>
             </div>
           </Link>
         </div>

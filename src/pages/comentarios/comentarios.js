@@ -5,7 +5,7 @@ import styles from "./comentarios.module.css";
 import axios from "axios";
 import { BASE_URL } from "../../constants/BASE_URL";
 import { useParams } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 function Comentarios() {
   const { postId } = useParams();
@@ -55,9 +55,7 @@ function Comentarios() {
         `${BASE_URL}/posts/${postId}/comentarios`,
         {
           comentario: textoComentario,
-          responsavelId: userId,
-          numeroCurtidas: 0,
-          numeroDeslikes: 0,
+          responsavelId: userId
         },
         {
           headers: {
@@ -65,9 +63,9 @@ function Comentarios() {
           },
         }
       );
-      const response = await axios.get(`${BASE_URL}/posts/${postId}/comentarios`);
-      setComentarios(response.data);
-      setTextoComentario("");
+      // Atualize apenas os comentários do post atual após a adição de um novo comentário
+      const updatedComments = await axios.get(`${BASE_URL}/posts/${postId}/comentarios`);
+      setComentarios(updatedComments.data);
     } catch (error) {
       console.log("Erro ao adicionar comentário: ", error);
     }

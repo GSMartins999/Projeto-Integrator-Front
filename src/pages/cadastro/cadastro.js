@@ -16,16 +16,28 @@ function Cadastro() {
 
   const navigate = useNavigate();
 
-  //Função para enviar os dados
-  const enviaCadastro = (event) => {
+  // Função para verificar se o email já está cadastrado
+  const verificaEmailCadastrado = async (email) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/users/email/${email}`);
+      return response.data.exists; // Retorna true se o email já estiver cadastrado
+    } catch (error) {
+      console.error("Erro ao verificar email cadastrado:", error);
+      return false;
+    }
+  };
+
+  // Função para enviar os dados do cadastro
+  const enviaCadastro = async (event) => {
     event.preventDefault();
+
     const dadosUsuario = {
       apelido: form.apelido,
       email: form.email,
       password: form.password,
     };
-    console.log(dadosUsuario);
-    //Criando User e pegando o token e armazenando no localStorage
+
+    // Criando usuário e pegando o token
     axios
       .post(`${BASE_URL}/users`, dadosUsuario)
       .then((res) => {
@@ -88,11 +100,11 @@ function Cadastro() {
             <div className={styles.ContainerTextos}>
               <p className={styles.textos}>
                 Ao continuar, você concorda com o nosso{" "}
-                <a href="" className={styles.estiloTexto}>
+                <a href="#" className={styles.estiloTexto}>
                   Contrato de usuário
-                </a>{" "}
-                e nossa{" "}
-                <a href="" className={styles.estiloTexto}>
+                </a>{""}
+                e nossa{""}
+                <a href="#" className={styles.estiloTexto}>
                   Política de Privacidade
                 </a>
               </p>
@@ -111,7 +123,7 @@ function Cadastro() {
                 Eu concordo em receber emails sobre coisas legais no Labeddit
               </p>
             </div>
-            <BotaoColorido type="submit"/>
+            <BotaoColorido type="submit" />
           </form>
         </div>
       </div>
