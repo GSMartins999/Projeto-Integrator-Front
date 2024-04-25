@@ -10,38 +10,66 @@ import axios from "axios";
 export const Card = ({ post, userId }) => {
   const [curtidas, setCurtidas] = useState(post.numeroCurtidas);
   const [deslikes, setDeslikes] = useState(post.numeroDeslikes);
+  const [isCurtido, setIsCurtido] = useState(false);
+  const [isDescurtido, setIsDescurtido] = useState(false);
   const [numeroComentarios, setNumeroComentarios] = useState(post.numeroComentarios);
 
   useEffect(() => {
     setNumeroComentarios(post.numeroComentarios);
-  }, [post.numeroComentarios]);
+    
+    // Verificar se o usuário já curtiu o post anteriormente
+    const liked = localStorage.getItem(`liked_${post.id}`);
+    setIsCurtido(liked === 'true');
+
+    // Verificar se o usuário já descurtiu o post anteriormente
+    const disliked = localStorage.getItem(`disliked_${post.id}`);
+    setIsDescurtido(disliked === 'true');
+  }, [post.numeroComentarios, post.id]);
 
   const handleCurtir = async () => {
     try {
-      await axios.post(`${BASE_URL}/posts/${post.id}/likes`, { userId }, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
+      if (!isCurtido) {
+        await axios.post(`${BASE_URL}/posts/${post.id}/likes`, { userId }, {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          }
+        });
+        setCurtidas(curtidas + 1);
+        setIsCurtido(true);
+        localStorage.setItem(`liked_${post.id}`, 'true');
+        if (isDescurtido) {
+          setDeslikes(deslikes - 1);
+          setIsDescurtido(false);
+          localStorage.removeItem(`disliked_${post.id}`);
         }
-      });
-      setCurtidas(curtidas + 1);
+      }
     } catch (error) {
       console.log("Erro ao curtir o post: ", error);
     }
   };
-
+  
   const handleDescurtir = async () => {
     try {
-      await axios.post(`${BASE_URL}/posts/${post.id}/deslikes`, { userId }, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
+      if (!isDescurtido) {
+        await axios.post(`${BASE_URL}/posts/${post.id}/deslikes`, { userId }, {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          }
+        });
+        setDeslikes(deslikes + 1);
+        setIsDescurtido(true);
+        localStorage.setItem(`disliked_${post.id}`, 'true');
+        if (isCurtido) {
+          setCurtidas(curtidas - 1);
+          setIsCurtido(false);
+          localStorage.removeItem(`liked_${post.id}`);
         }
-      });
-      setDeslikes(deslikes + 1);
+      }
     } catch (error) {
       console.log("Erro ao descurtir o post: ", error);
     }
   };
-
+  
   return (
     <div className={styles.container}>
       <div className={styles.card}>
