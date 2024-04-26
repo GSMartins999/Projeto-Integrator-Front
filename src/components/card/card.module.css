@@ -85,3 +85,12 @@
 .imagemSetas:hover{
     border: blue;
 }
+
+
+.likeActive{
+    background-color: #008CBA;
+}
+
+.deslikeActive{
+    background-color: #f44336;
+}

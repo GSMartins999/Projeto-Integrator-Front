@@ -4,72 +4,79 @@ import cima from "./../../img/cima.png";
 import baixa from "./../../img/baixa.png";
 import comentário from "./../../img/comentário.png";
 import { Link } from "react-router-dom";
-import { BASE_URL } from "../../constants/BASE_URL";
 import axios from "axios";
+import { BASE_URL } from "../../constants/BASE_URL";
 
 export const Card = ({ post, userId }) => {
-  const [curtidas, setCurtidas] = useState(post.numeroCurtidas);
+  const [like, setLike] = useState(post.numeroCurtidas);
   const [deslikes, setDeslikes] = useState(post.numeroDeslikes);
-  const [isCurtido, setIsCurtido] = useState(false);
-  const [isDescurtido, setIsDescurtido] = useState(false);
-  const [numeroComentarios, setNumeroComentarios] = useState(post.numeroComentarios);
+  const [likeActive, setLikeActive] = useState(false);
+  const [deslikeActive, setDeslikeActive] = useState(false);
+  const [previousAction, setPreviousAction] = useState(null);
+  const [numeroComentarios, setNumeroComentarios] = useState(0);
 
   useEffect(() => {
-    setNumeroComentarios(post.numeroComentarios);
-    
-    // Verificar se o usuário já curtiu o post anteriormente
-    const liked = localStorage.getItem(`liked_${post.id}`);
-    setIsCurtido(liked === 'true');
+    const storedActions = JSON.parse(localStorage.getItem(`actions_${post.id}_${userId}`));
+    if (storedActions) {
+      setLikeActive(storedActions.includes("like"));
+      setDeslikeActive(storedActions.includes("deslike"));
+    } else {
+      setLikeActive(false);
+      setDeslikeActive(false);
+    }
 
-    // Verificar se o usuário já descurtiu o post anteriormente
-    const disliked = localStorage.getItem(`disliked_${post.id}`);
-    setIsDescurtido(disliked === 'true');
-  }, [post.numeroComentarios, post.id]);
+    // Obter o número de comentários do post
+    const fetchNumeroComentarios = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/posts/${post.id}/comentarios`);
+        setNumeroComentarios(response.data.length);
+      } catch (error) {
+        console.error("Erro ao obter o número de comentários:", error);
+      }
+    };
 
-  const handleCurtir = async () => {
+    fetchNumeroComentarios();
+  }, [post.id, userId]);
+
+  const handleAction = async (actionType) => {
     try {
-      if (!isCurtido) {
-        await axios.post(`${BASE_URL}/posts/${post.id}/likes`, { userId }, {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          }
-        });
-        setCurtidas(curtidas + 1);
-        setIsCurtido(true);
-        localStorage.setItem(`liked_${post.id}`, 'true');
-        if (isDescurtido) {
-          setDeslikes(deslikes - 1);
-          setIsDescurtido(false);
-          localStorage.removeItem(`disliked_${post.id}`);
-        }
+      const storedActions = JSON.parse(localStorage.getItem(`actions_${post.id}_${userId}`));
+      if (actionType === "like" && !likeActive && (!storedActions || !storedActions.includes("like"))) {
+        setLike(prevLike => prevLike + 1);
+        setLikeActive(true);
+        setDeslikeActive(false);
+        setPreviousAction("like");
+        localStorage.setItem(`actions_${post.id}_${userId}`, JSON.stringify(["like"]));
+        await sendActionsToServer("like");
+      } else if (actionType === "deslike" && !deslikeActive && (!storedActions || !storedActions.includes("deslike"))) {
+        setDeslikes(prevDeslikes => prevDeslikes + 1);
+        setDeslikeActive(true);
+        setLikeActive(false);
+        setPreviousAction("deslike");
+        localStorage.setItem(`actions_${post.id}_${userId}`, JSON.stringify(["deslike"]));
+        await sendActionsToServer("deslike");
+      } else if ((actionType === "like" && likeActive) || (actionType === "deslike" && deslikeActive)) {
+        // Remover ação do usuário
+        setLikeActive(false);
+        setDeslikeActive(false);
+        setPreviousAction(null);
+        localStorage.removeItem(`actions_${post.id}_${userId}`);
       }
     } catch (error) {
-      console.log("Erro ao curtir o post: ", error);
+      console.error("Erro ao realizar ação:", error);
     }
   };
-  
-  const handleDescurtir = async () => {
+
+  const sendActionsToServer = async (actionType) => {
     try {
-      if (!isDescurtido) {
-        await axios.post(`${BASE_URL}/posts/${post.id}/deslikes`, { userId }, {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          }
-        });
-        setDeslikes(deslikes + 1);
-        setIsDescurtido(true);
-        localStorage.setItem(`disliked_${post.id}`, 'true');
-        if (isCurtido) {
-          setCurtidas(curtidas - 1);
-          setIsCurtido(false);
-          localStorage.removeItem(`liked_${post.id}`);
-        }
-      }
+      await axios.post(`${BASE_URL}/posts/${post.id}/${actionType}s`, {
+        userId: userId
+      });
     } catch (error) {
-      console.log("Erro ao descurtir o post: ", error);
+      console.error(`Erro ao enviar ${actionType} para o servidor:`, error);
     }
   };
-  
+
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -79,19 +86,19 @@ export const Card = ({ post, userId }) => {
         <p className={styles.textos}>{post.description}</p>
         <div className={styles.ContainerCurtidasComent}>
           <div className={styles.containerlikesDeslikes}>
-            <button>
-              <img src={cima} className={styles.imagemSetas} onClick={handleCurtir} />
+            <button onClick={() => handleAction("like")} className={likeActive ? styles.likeActive : ""}>
+              <img src={cima} className={styles.imagemSetas}/>
             </button>
-            {curtidas - deslikes}
-            <button>
-              <img src={baixa} className={styles.imagemSetas} onClick={handleDescurtir} />
+            {like - deslikes}
+            <button onClick={() => handleAction("deslike")} className={deslikeActive ? styles.deslikeActive : ""}>
+              <img src={baixa} className={styles.imagemSetas} />
             </button>
           </div>
           <Link to={`/comentarios/${post.id}`} className={styles.comentsContainer}>
-            <div className={styles.coments}>
+            <button className={styles.coments}>
               <img src={comentário} className={styles.imagemSetas} />
               <span>{numeroComentarios}</span>
-            </div>
+            </button>
           </Link>
         </div>
       </div>

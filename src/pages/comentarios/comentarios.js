@@ -5,7 +5,7 @@ import styles from "./comentarios.module.css";
 import axios from "axios";
 import { BASE_URL } from "../../constants/BASE_URL";
 import { useParams } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode"; // Importe jwtDecode
 import cima from "./../../img/cima.png";
 import baixa from "./../../img/baixa.png";
 
@@ -16,6 +16,7 @@ function Comentarios() {
   const [userId, setUserId] = useState("");
   const [curtidasDeslikes, setCurtidasDeslikes] = useState({});
 
+  // Decodificar token JWT para obter userId
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -188,8 +189,7 @@ function Comentarios() {
                       >
                         <img src={cima} className={styles.imagemSetas} />
                       </button>
-                      {curtidasDeslikes[comentario.id].curtidas -
-                        curtidasDeslikes[comentario.id].deslikes}
+                      {curtidasDeslikes[comentario.id].curtidas}
                       <button
                         className={`${styles.buttonDescurtir} ${curtidasDeslikes[comentario.id].disliked ? styles.active : ""}`}
                         onClick={() =>
