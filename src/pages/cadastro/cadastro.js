@@ -17,7 +17,6 @@ function Cadastro() {
 
   const navigate = useNavigate();
 
-  // Função para enviar os dados do cadastro
   const enviaCadastro = async (event) => {
     event.preventDefault();
 
@@ -27,7 +26,6 @@ function Cadastro() {
       password: form.password,
     };
 
-    // Criando usuário e pegando o token
     axios
       .post(`${BASE_URL}/users`, dadosUsuario)
       .then((res) => {
