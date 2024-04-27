@@ -7,6 +7,7 @@ import styles from "./cadastro.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+
 function Cadastro() {
   const { form, onChangeInputs, clearInputs } = useForm({
     apelido: "",
@@ -15,17 +16,6 @@ function Cadastro() {
   });
 
   const navigate = useNavigate();
-
-  // Função para verificar se o email já está cadastrado
-  const verificaEmailCadastrado = async (email) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/users/email/${email}`);
-      return response.data.exists; // Retorna true se o email já estiver cadastrado
-    } catch (error) {
-      console.error("Erro ao verificar email cadastrado:", error);
-      return false;
-    }
-  };
 
   // Função para enviar os dados do cadastro
   const enviaCadastro = async (event) => {

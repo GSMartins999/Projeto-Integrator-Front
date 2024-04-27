@@ -45,6 +45,14 @@
     margin-top: 20px;
 }
 
+.ContainerComentarios{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
 .ContainerCard{
     width: 100%;
     height: 100%;
@@ -52,18 +60,109 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 5px;
+
 }
 
 .ContainerCard{
     width: 100%;
+    max-width: 350px;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #EDEDED;
+    border-radius: 10px;
 }
 
 .texto{
     color: black;
+}
+
+.container{
+    width: 350px;
+    min-height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+.card{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    border-radius: 10px;
+    border: #E0E0E0 solid 2px;
+    gap: 10px;
+    cursor: pointer;
+    width: 100px;
+    height: 25px;
+}
+
+.titulo{
+    color: #6F6F6F;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    font-size: 0.8rem;
+    width: 100%;
+}
+.textos{
+    color: black;
+    display: flex;
+    word-wrap: break-word;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+
+}
+
+.ContainerCurtidasComent{
+    display: flex;
+    flex-direction: row;
+    width: 200px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+
+
+.containerlikesDeslikes{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    border-radius: 10px;
+    border: #E0E0E0 solid 2px;
+    background-color: #FBFBFB;
+    gap: 10px;
+    cursor: pointer;
+}
+
+
+.imagemSetas{
+    width: 20px;
+    height: 20px;
+}
+
+.imagemSetas:hover{
+    border: blue;
+}
+
+.likeActive{
+    background-color: #008CBA;
+}
+
+.deslikeActive{
+    background-color: #f44336;
 }
