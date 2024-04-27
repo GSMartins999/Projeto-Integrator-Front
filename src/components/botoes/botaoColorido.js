@@ -6,7 +6,6 @@ export default function BotaoColorido() {
     const location = useLocation();
     let buttonText = "";
 
-    // Determinando o texto do botão com base na página atual
     switch (location.pathname) {
         case "/login":
             buttonText = "Continuar";
