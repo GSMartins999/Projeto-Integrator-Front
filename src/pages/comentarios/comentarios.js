@@ -5,7 +5,7 @@ import styles from "./comentarios.module.css";
 import axios from "axios";
 import { BASE_URL } from "../../constants/BASE_URL";
 import { useParams } from "react-router-dom";
-import {jwtDecode} from "jwt-decode"; // Importe jwtDecode
+import { jwtDecode } from "jwt-decode";
 import cima from "./../../img/cima.png";
 import baixa from "./../../img/baixa.png";
 
@@ -16,7 +16,6 @@ function Comentarios() {
   const [userId, setUserId] = useState("");
   const [curtidasDeslikes, setCurtidasDeslikes] = useState({});
 
-  // Decodificar token JWT para obter userId
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -52,7 +51,7 @@ function Comentarios() {
         curtidas: comentario.numeroCurtidas,
         deslikes: comentario.numeroDeslikes,
         liked: false,
-        disliked: false
+        disliked: false,
       };
       return acc;
     }, {});
@@ -93,59 +92,88 @@ function Comentarios() {
     }
   };
 
-  const handleCurtir = async (postId, comentarioId) => {
+  const handleCurtir = async (comentarioId) => {
     try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("Token inválido ou não encontrado.");
+        return;
+      }
       await axios.post(
-        `${BASE_URL}/posts/${postId}/comentarios/${comentarioId}/likes`,
+        `${BASE_URL}/comentarios/${comentarioId}/likes`,
         { userId },
         {
           headers: {
-            Authorization: localStorage.getItem("token"),
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-      setCurtidasDeslikes((prevState) => ({
-        ...prevState,
-        [comentarioId]: {
-          ...prevState[comentarioId],
-          curtidas: prevState[comentarioId].liked
-            ? prevState[comentarioId].curtidas - 1
-            : prevState[comentarioId].curtidas + 1,
-          liked: !prevState[comentarioId].liked,
-          disliked: false
-        },
-      }));
+      setCurtidasDeslikes((prevState) => {
+        const newState = {
+          ...prevState,
+          [comentarioId]: {
+            ...prevState[comentarioId],
+            curtidas: prevState[comentarioId].liked
+              ? prevState[comentarioId].curtidas - 1
+              : prevState[comentarioId].curtidas + 1,
+            liked: !prevState[comentarioId].liked,
+            disliked: false,
+          },
+        };
+        localStorage.setItem("curtidasDeslikes", JSON.stringify(newState));
+        return newState;
+      });
     } catch (error) {
       console.log("Erro ao curtir o comentário: ", error);
     }
   };
 
-  const handleDescurtir = async (postId, comentarioId) => {
+  const handleDescurtir = async (comentarioId) => {
     try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("Token inválido ou não encontrado.");
+        return;
+      }
       await axios.post(
-        `${BASE_URL}/posts/${postId}/comentarios/${comentarioId}/deslikes`,
+        `${BASE_URL}/comentarios/${comentarioId}/deslikes`,
         { userId },
         {
           headers: {
-            Authorization: localStorage.getItem("token"),
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-      setCurtidasDeslikes((prevState) => ({
-        ...prevState,
-        [comentarioId]: {
-          ...prevState[comentarioId],
-          deslikes: prevState[comentarioId].disliked
-            ? prevState[comentarioId].deslikes - 1
-            : prevState[comentarioId].deslikes + 1,
-          disliked: !prevState[comentarioId].disliked,
-          liked: false
-        },
-      }));
+      setCurtidasDeslikes((prevState) => {
+        const newState = {
+          ...prevState,
+          [comentarioId]: {
+            ...prevState[comentarioId],
+            deslikes: prevState[comentarioId].disliked
+              ? prevState[comentarioId].deslikes - 1
+              : prevState[comentarioId].deslikes + 1,
+            disliked: !prevState[comentarioId].disliked,
+            liked: false,
+          },
+        };
+        localStorage.setItem("curtidasDeslikes", JSON.stringify(newState));
+        return newState;
+      });
     } catch (error) {
       console.log("Erro ao descurtir o comentário: ", error);
     }
   };
+
+  useEffect(() => {
+    const storedCurtidasDeslikes = localStorage.getItem("curtidasDeslikes");
+    if (storedCurtidasDeslikes) {
+      setCurtidasDeslikes(JSON.parse(storedCurtidasDeslikes));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("curtidasDeslikes", JSON.stringify(curtidasDeslikes));
+  }, [curtidasDeslikes]);
 
   return (
     <div className={styles.ContainerGeral}>
@@ -182,22 +210,28 @@ function Comentarios() {
                   <div className={styles.ContainerCurtidasComent}>
                     <div className={styles.containerlikesDeslikes}>
                       <button
-                        className={`${styles.buttonCurtir} ${curtidasDeslikes[comentario.id].liked ? styles.active : ""}`}
-                        onClick={() =>
-                          handleCurtir(postId, comentario.id)
-                        }
+                        className={`${styles.buttonCurtir} ${
+                          curtidasDeslikes[comentario.id].liked
+                            ? styles.likeActive
+                            : ""
+                        }`}
+                        onClick={() => handleCurtir(comentario.id)}
                       >
                         <img src={cima} className={styles.imagemSetas} />
                       </button>
-                      {curtidasDeslikes[comentario.id].curtidas}
+
+                      {curtidasDeslikes[comentario.id].curtidas - curtidasDeslikes[comentario.id].deslikes}
                       <button
-                        className={`${styles.buttonDescurtir} ${curtidasDeslikes[comentario.id].disliked ? styles.active : ""}`}
-                        onClick={() =>
-                          handleDescurtir(postId, comentario.id)
-                        }
+                        className={`${styles.buttonDescurtir} ${
+                          curtidasDeslikes[comentario.id].disliked
+                            ? styles.deslikeActive
+                            : ""
+                        }`}
+                        onClick={() => handleDescurtir(comentario.id)}
                       >
                         <img src={baixa} className={styles.imagemSetas} />
                       </button>
+
                     </div>
                   </div>
                 </div>
