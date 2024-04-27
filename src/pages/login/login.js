@@ -6,7 +6,7 @@ import styles from "./login.module.css";
 import { useForm } from "../../hooks/useForm";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode"; // Ajustando a importação do jwtDecode
+import { jwtDecode } from "jwt-decode";
 import { goToFeed } from "../../Router/cordinator";
 import { BASE_URL } from "../../constants/BASE_URL";
 
@@ -18,7 +18,6 @@ function Login() {
 
   const navigate = useNavigate();
 
-  // Função para enviar os dados
   const enviaLogin = async (event) => {
     event.preventDefault();
     try {
@@ -26,7 +25,6 @@ function Login() {
       const { token } = response.data;
       localStorage.setItem("token", token);
       
-      // Decodificar o token JWT para obter informações
       const decodedToken = jwtDecode(token);
       console.log("ID do usuário:", decodedToken.id);
       
