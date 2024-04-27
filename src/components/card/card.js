@@ -25,7 +25,6 @@ export const Card = ({ post, userId }) => {
       setDeslikeActive(false);
     }
 
-    // Obter o número de comentários do post
     const fetchNumeroComentarios = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/posts/${post.id}/comentarios`);
@@ -56,7 +55,6 @@ export const Card = ({ post, userId }) => {
         localStorage.setItem(`actions_${post.id}_${userId}`, JSON.stringify(["deslike"]));
         await sendActionsToServer("deslike");
       } else if ((actionType === "like" && likeActive) || (actionType === "deslike" && deslikeActive)) {
-        // Remover ação do usuário
         setLikeActive(false);
         setDeslikeActive(false);
         setPreviousAction(null);
