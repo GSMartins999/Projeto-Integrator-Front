@@ -8,14 +8,6 @@ import Comentarios from "../pages/comentarios/comentarios";
 
 
 
-// //Verifica se a pessoa está logada, se não ele direciona para a página de login, se estiver ele retorna para o Item(no caso a página Home)
-// const Private = ({Item}) => {
-//     const signed = false;
-
-//     return signed > 0 ? <Item/> : <Login/>
-// }
-
-
 const Router = () => {
     return(
         <>
