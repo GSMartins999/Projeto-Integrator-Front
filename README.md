@@ -6,7 +6,8 @@
 
 # O projeto visa usar:
 
-- Front-end: https://www.figma.com/file/Byakv89sjTqI6NG2NRAAKJ/Projeto-Integrador-Labeddit?type=design&node-id=0-1&mode=design&t=i6HuwyQHWAVBuq1c-0
+- Front-end deve seguir o seguinte modelo:
+ https://www.figma.com/file/Byakv89sjTqI6NG2NRAAKJ/Projeto-Integrador-Labeddit?type=design&node-id=0-1&mode=design&t=i6HuwyQHWAVBuq1c-0
 
 - [ ]  Respeitar o layout do Figma
 - [ ]  Uso do ReactJS
