@@ -2,6 +2,7 @@
 
 
 - O projeto Integrator tem o objetivo utilizar todo aquilo que vimos nesse bootcampo da Labenu durante o ano.
+- O link abaixo te leva direto para a página inicial do projeto: https://gmslabedit.surge.sh/login
 
 
 # O projeto visa usar:
